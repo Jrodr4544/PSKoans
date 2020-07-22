@@ -35,13 +35,13 @@ Describe 'Basic Number Types' {
             $Int = 10
             $Double = 10.0
 
-            'System.____' | Should -Be $Int.GetType().Fullname
-            'System.____' | Should -Be $Double.GetType().Fullname
+            'System.Int32' | Should -Be $Int.GetType().Fullname
+            'System.Double' | Should -Be $Double.GetType().Fullname
 
             $Result = $Int * $Double
 
             # What type results when you multiply integers and doubles?
-            'System.____' | Should -Be $Result.GetType().Fullname
+            'System.Double' | Should -Be $Result.GetType().Fullname
         }
     }
 
@@ -59,9 +59,9 @@ Describe 'Basic Number Types' {
 
             $Pi = [Math]::PI
 
-            'System.____' | Should -be $Pi.GetType().Fullname
+            'System.Double' | Should -be $Pi.GetType().Fullname
             # What number will return if you pass Pi into an int function?
-            ___ | Should -Be (Get-Number -Number $Pi)
+            3 | Should -Be (Get-Number -Number $Pi)
         }
 
         It 'can be a larger number if needed' {
@@ -78,15 +78,15 @@ Describe 'Basic Number Types' {
             $MaxValue = [int]::MaxValue
             $MinValue = [int]::MinValue
 
-            __ | Should -Be $MaxValue
-            __ | Should -Be $MinValue
+            2147483647 | Should -Be $MaxValue
+            -2147483648 | Should -Be $MinValue
 
             # If you enter a number larger than that, the type should change.
-            $BigValue = __
+            $BigValue = 9999999999
             $BigValue | Should -BeOfType [long]
             $BigValue | Should -BeGreaterThan $MaxValue
 
-            $SmallValue = __
+            $SmallValue = -9999999999
             $SmallValue | Should -BeOfType [long]
             $SmallValue | Should -BeLessThan $MinValue
         }
@@ -100,7 +100,7 @@ Describe 'Basic Number Types' {
 
             100L | Should -BeOfType [long]
 
-            $Value = __
+            $Value = 1L
             $Value | Should -BeOfType [long]
             [int]::MinValue -le $Value -and $Value -le [int]::MaxValue | Should -BeTrue
         }
@@ -123,11 +123,11 @@ Describe "Banker's Rounding" {
 
     It 'rounds to the nearest even when cast to integer if it is a midpoint' {
         # How will these numbers be rounded to integer?
-        ____ | Should -Be ([int]2.5)
-        ____ | Should -Be ([int]3.34)
-        ____ | Should -Be ([int]12.7)
+        2 | Should -Be ([int]2.5)
+        3 | Should -Be ([int]3.34)
+        13 | Should -Be ([int]12.7)
 
-        ____ | Should -Be ([long]10.61)
-        ____ | Should -Be ([long]5.5)
+        11 | Should -Be ([long]10.61)
+        6 | Should -Be ([long]5.5)
     }
 }
