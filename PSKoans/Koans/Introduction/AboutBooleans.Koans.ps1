@@ -43,26 +43,26 @@ Describe "Booleans" {
     #>
 
     It 'evaluates ( 1 -gt 2 ) as a boolean expression' {
-        $____ | Should -Be ( 1 -gt 2 ) -Because '1 is not greater than 2'
+        $false | Should -Be ( 1 -gt 2 ) -Because '1 is not greater than 2'
     }
 
     It 'evaluates ( 1 -lt 2 ) as a boolean expression' {
-        $____ | Should -Be ( 1 -lt 2 ) -Because '1 is less than 2'
+        $true | Should -Be ( 1 -lt 2 ) -Because '1 is less than 2'
     }
 
     It 'evaluates ( 10 -lt 20 ) as a boolean expression' {
-        $____ | Should -Be ( 10 -lt 20 ) -Because '10 is less than 20'
+        $true | Should -Be ( 10 -lt 20 ) -Because '10 is less than 20'
     }
 
     It 'evaluates ( 10 -gt 20 ) as a boolean expression' {
-        $____ | Should -Be ( 10 -gt 20 ) -Because 'The lesser is not greater'
+        $false | Should -Be ( 10 -gt 20 ) -Because 'The lesser is not greater'
     }
 
     It 'evaluates ( 3 -eq 3 ) as a boolean expression' {
-        $____ | Should -Be ( 3 -eq 3 ) -Because 'A mirror reflects true'
+        $true | Should -Be ( 3 -eq 3 ) -Because 'A mirror reflects true'
     }
 
     It 'evaluates ( 100 -lt 1 ) as a boolean expression' {
-        $____ | Should -Be ( 100 -lt 1 ) -Because '100 is not less than 1'
+        $false | Should -Be ( 100 -lt 1 ) -Because '100 is not less than 1'
     }
 }
