@@ -45,11 +45,11 @@ Describe "Basic Verbs" {
                 Fill in each blank with the name of a different Get-* command.
             #>
             $Answers = @(
-                "____"
-                "____"
-                "____"
-                "____"
-                "____"
+                "Get-TypeData"
+                "Get-Unique"
+                "Get-Variable"
+                "Get-WindowsDriver"
+                "Get-WindowsEdition"
             )
             $Answers | Should -BeIn (Get-Command -Verb Get).Name
 
@@ -72,11 +72,11 @@ Describe "Basic Verbs" {
                 Replace each ____ with the name of a New-* command.
             #>
             $Answers = @(
-                "____"
-                "____"
-                "____"
-                "____"
-                "____"
+                "New-Alias"
+                "New-Event"
+                "New-Item"
+                "New-Module"
+                "New-Object"
             )
             $Answers | Should -BeIn (Get-Command -Verb New).Name
 
@@ -101,8 +101,8 @@ Describe "Basic Verbs" {
                     Get-Command New-Item -Syntax
                     Get-Help New-Item -Examples
             #>
-
-            $File = ____ -Path $FilePath -ItemType File
+            
+            $File = New-Item -Path $FilePath -ItemType File
 
             # All "file" objects are of this type.
             $File | Should -BeOfType [System.IO.FileInfo]
@@ -133,7 +133,7 @@ Describe "Basic Verbs" {
 
                 Replace each ____ with the name of an Add-* command.
             #>
-            $Answers = "____", "____", "____", "____", "____"
+            $Answers = "Add-AppPackage", "Add-AppPackageVolume", "Add-AssertionOperator", "Add-ShouldOperator", "Add-MpPreference"
             $Answers | Should -BeIn (Get-Command -Verb Add).Name
 
             $Answers | Get-Unique | Should -HaveCount 5 -Because "five unique cmdlets are required"
@@ -144,23 +144,23 @@ Describe "Basic Verbs" {
                 Try adding this content to the file we created above using
                 Add-Content.
             #>
-            "Mountains are merely mountains." | ____ -Path $FilePath
+            "Mountains are merely mountains." | Add-Content -Path $FilePath
 
             <#
                 Let's see what happens if we add a whole bunch of things! Fill
                 in these blanks with whatever you like.
             #>
 
-            '____' | Add-Content -Path $FilePath
-            '____' | Add-Content -Path $FilePath
-            '____' | Add-Content -Path $FilePath
-            '____' | Add-Content -Path $FilePath
+            'Random' | Add-Content -Path $FilePath
+            'Test' | Add-Content -Path $FilePath
+            'adding' | Add-Content -Path $FilePath
+            'content' | Add-Content -Path $FilePath
 
             # Let's check the contents of the file.
             $FileData = Get-Content -Path $FilePath
 
             # How many lines did we end up with?
-            __ | Should -Be $FileData.Count
+            5 | Should -Be $FileData.Count
 
             <#
                 We can see that several lines of content were added to the file.
@@ -171,10 +171,11 @@ Describe "Basic Verbs" {
 
             $ExpectedContent = @(
                 'Mountains are merely mountains.'
-                '____'
-                '____'
-                '____'
-                'The road onwards, the road back; which is the shorter?'
+                'Random'
+                'Test'
+                'adding'
+                'content'
+                # 'The road onwards, the road back; which is the shorter?'
             )
 
             $ExpectedContent | Should -BeExactly $FileData
@@ -202,7 +203,7 @@ Describe "Basic Verbs" {
 
                 Replace each ____ with the name of a Set-* command.
             #>
-            $Answers = "____", "____", "____", "____", "____"
+            $Answers = "Set-Service", "Set-Timezone", "Set-TraceSource", "Set-Variable", "Set-WindowsEdition"
             $Answers | Should -BeIn (Get-Command -Verb Set).Name
 
             $Answers | Get-Unique | Should -HaveCount 5 -Because "five unique cmdlets are required"
@@ -225,10 +226,10 @@ Describe "Basic Verbs" {
 
             # So what should be in the file now?
             $FileContent = Get-Content -Path $FilePath
-            "____" | Should -BeExactly $FileContent
+            "Wherever you are, it's the place you need to be." | Should -BeExactly $FileContent
 
             # What happens if we set the contents again?
-            '____' | Set-Content -Path $FilePath
+            'Rest and be kind, you don''t have to prove anything.' | Set-Content -Path $FilePath
             Get-Content -Path $FilePath | Should -BeExactly "Rest and be kind, you don't have to prove anything."
             <#
                 You'll see that there's only one line of text in the file. This
@@ -254,7 +255,7 @@ Describe "Basic Verbs" {
 
             Replace each ____ with the name of a Remove-* command.
         #>
-            $Answers = "____", "____", "____", "____", "____"
+            $Answers = "Remove-Computer", "Remove-Event", "Remove-Item", "Remove-Job", "Remove-Module"
             $Answers | Should -BeIn (Get-Command -Verb Remove).Name
 
             $Answers | Get-Unique | Should -HaveCount 5 -Because "five unique cmdlets are required"
@@ -273,7 +274,7 @@ Describe "Basic Verbs" {
             $FilePath | Should -Exist
 
             # Use Remove-item to delete the file completely.
-            ____ -Path $FilePath
+            Remove-Item -Path $FilePath
 
             # Let's check it was removed properly.                Test-Path $FilePath -PathType Leaf | Should -BeTrue
             Test-Path $FilePath | Should -BeFalse
@@ -282,7 +283,7 @@ Describe "Basic Verbs" {
                     If we try to remove a file that doesn't exist, we should get
                     an error. What does that error look like?
                 #>
-            $Message = "____"
+            $Message = "Cannot find path"
             { Remove-Item -Path $FilePath -ErrorAction Stop } | Should -Throw -ExpectedMessage $Message
         }
     }
