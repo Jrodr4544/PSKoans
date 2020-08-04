@@ -70,8 +70,8 @@ Describe "Get Member" {
         }
 
         It 'lists one of the properties of the first unique command' {
-            $CmdletName = '____'
-            $PropertyName = '____'
+            $CmdletName = 'Get-Command'
+            $PropertyName = 'CommandType'
 
             $Reason = $PropertyString -f $PropertyName, $CmdletName
             & (Get-Command -Name $CmdletName) |
@@ -82,8 +82,8 @@ Describe "Get Member" {
         }
 
         It 'lists one of the properties of the second unique command' {
-            $CmdletName = '____'
-            $PropertyName = '____'
+            $CmdletName = 'Get-Date'
+            $PropertyName = 'Date'
 
             $Reason = $PropertyString -f $PropertyName, $CmdletName
             & (Get-Command -Name $CmdletName) |
@@ -94,8 +94,8 @@ Describe "Get Member" {
         }
 
         It 'lists one of the properties of the third unique command' {
-            $CmdletName = '____'
-            $PropertyName = '____'
+            $CmdletName = 'Get-Variable'
+            $PropertyName = 'Name'
 
             $Reason = $PropertyString -f $PropertyName, $CmdletName
             & (Get-Command -Name $CmdletName) |
@@ -128,36 +128,36 @@ Describe "Get Member" {
         }
 
         It 'lists one of the methods of the first unique command' {
-            $CmdletName = '____'
-            $MethodName = '____'
+            $CmdletName = 'Get-PSKoan'
+            $MethodName = 'ToString'
 
             $Reason = $MethodString -f $MethodName, $CmdletName
             & (Get-Command -Name $CmdletName) |
-                Get-Member -MemberType Property -Name $MethodName |
+                Get-Member -MemberType Method -Name $MethodName |
                 Should -Not -BeNullOrEmpty -Because $Reason
 
             $Cmdlets.Add($CmdletName) | Should -BeTrue -Because $UniqueString
         }
 
         It 'lists one of the methods of the second unique command' {
-            $CmdletName = '____'
-            $MethodName = '____'
+            $CmdletName = 'Get-Date'
+            $MethodName = 'AddHours'
 
             $Reason = $MethodString -f $MethodName, $CmdletName
             & (Get-Command -Name $CmdletName) |
-                Get-Member -MemberType Property -Name $MethodName |
+                Get-Member -MemberType Method -Name $MethodName |
                 Should -Not -BeNullOrEmpty -Because $Reason
 
             $Cmdlets.Add($CmdletName) | Should -BeTrue -Because $UniqueString
         }
 
         It 'lists one of the methods of the third unique command' {
-            $CmdletName = '____'
-            $MethodName = '____'
+            $CmdletName = 'Get-Command'
+            $MethodName = 'GetType'
 
             $Reason = $MethodString -f $MethodName, $CmdletName
             & (Get-Command -Name $CmdletName) |
-                Get-Member -MemberType Property -Name $MethodName |
+                Get-Member -MemberType Method -Name $MethodName |
                 Should -Not -BeNullOrEmpty -Because $Reason
 
             $Cmdlets.Add($CmdletName) | Should -BeTrue -Because $UniqueString
