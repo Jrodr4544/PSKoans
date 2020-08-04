@@ -66,7 +66,7 @@ Describe 'Strings' {
                 This could be the result of a typing mistake.
             #>
             $String = "PowerShell's home folder is: $SPHome"
-            "____" | Should -Be $String
+            "PowerShell's home folder is: " | Should -Be $String
         }
 
         It 'can get confused about :' {
@@ -85,7 +85,7 @@ Describe 'Strings' {
 
             $Number = 1
             $String = "$Number:Get shopping"
-            '____' | Should -Be $String
+            ' shopping' | Should -Be $String
         }
 
         It 'can use curly braces to mark the variable name' {
@@ -97,14 +97,14 @@ Describe 'Strings' {
 
             $Number = 1
             $String = "${Number}:Get shopping"
-            '____' | Should -Be $String
+            '1:Get shopping' | Should -Be $String
         }
 
         It 'can escape special characters with backticks' {
             $LetterA = 'Apple'
             $String = "`$LetterA contains $LetterA."
 
-            '____' | Should -Be $String
+            '$LetterA contains Apple.' | Should -Be $String
         }
 
         It 'can escape quotation marks' {
@@ -113,8 +113,8 @@ Describe 'Strings' {
 
             # A mirror image, a familiar pattern, reflected in the glass.
             $Results = @(
-                '____'
-                '____'
+                'This is a "string" value.'
+                'This is a "string" value.'
             )
             $Results | Should -Be @($String, $AlternateString)
         }
@@ -145,7 +145,7 @@ Describe 'Strings' {
                 you can use to create the right character with PowerShell's
                 native string escape sequences.
             #>
-            $ActualValue = "`_"
+            $ActualValue = "`	"
 
             $ActualValue | Should -Be $ExpectedValue
         }
@@ -155,7 +155,7 @@ Describe 'Strings' {
 
         It 'adds strings together' {
             # Two become one.
-            $String1 = '_____'
+            $String1 = 'This string'
             $String2 = 'is cool.'
 
             $String1 + ' ' + $String2 | Should -Be 'This string is cool.'
@@ -166,7 +166,7 @@ Describe 'Strings' {
             $String1 = 'This string'
             $String2 = 'is cool.'
 
-            "$String1 $____" | Should -Be 'This string is cool.'
+            "$String1 $String2" | Should -Be 'This string is cool.'
         }
     }
 
@@ -190,8 +190,8 @@ Describe 'Strings' {
                 - The other only requires a starting index, and goes until the
                     end of the original string.
             #>
-            '____' | Should -Be $String.Substring(0, 6)
-            '____' | Should -Be $String.Substring(7)
+            'At the' | Should -Be $String.Substring(0, 6)
+            'very top!' | Should -Be $String.Substring(7)
         }
     }
 
@@ -211,26 +211,26 @@ Describe 'Strings' {
 '@ # This terminating sequence must be at the start of the line.
 
             # "Empty" space, too, is a thing of substance for some.
-            '            ____' | Should -Be $LiteralString
+            '            Hullo!' | Should -Be $LiteralString
         }
 
         It 'can be an evaluated string' {
             # The key is in the patterns.
-            $Number = __
+            $Number = 1 
 
             # Indentation sometimes gets a bit disrupted around here-strings.
             $String = @"
 I am number #$Number!
 "@
 
-            '____' | Should -Be $String
+            'I am number #1!' | Should -Be $String
         }
 
         It 'interprets all quotation marks literally' {
             $AllYourQuotes = @"
 All things that are not 'evaluated' are "recognised" as characters.
 "@
-            '____' | Should -Be $AllYourQuotes
+            'All things that are not ''evaluated'' are "recognised" as characters.' | Should -Be $AllYourQuotes
         }
     }
 
@@ -245,7 +245,7 @@ All things that are not 'evaluated' are "recognised" as characters.
                 'Hello'
                 'world'
             )
-            '____ ____' | Should -Be "$array"
+            'Hello world' | Should -Be "$array"
         }
 
         It 'can be joined with a different string by setting the OFS variable' {
@@ -263,7 +263,7 @@ All things that are not 'evaluated' are "recognised" as characters.
                 'Hello'
                 'world'
             )
-            '____' | Should -Be "$array"
+            'Hello... world' | Should -Be "$array"
 
             # Removing the created OFS variable, the default will be restored.
             Remove-Variable -Name OFS -Force
