@@ -58,7 +58,7 @@ Describe 'Strings' {
 
         It 'will expand variables that do not exist' {
             <#
-                If a string contains a variable that has not been created,
+                 If a string contains a variable that has not been created,
                 PowerShell will still try to expand the value. A variable that
                 doesn't exist or has a null value will simply disappear when it
                 is expanded.
