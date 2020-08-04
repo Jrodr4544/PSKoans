@@ -15,27 +15,27 @@ param()
 Describe 'Strings' {
 
     It 'is a simple string of text' {
-        '____' | Should -Be 'string'
+        'string' | Should -Be 'string'
     }
 
     Context 'Literal Strings' {
 
         It 'assumes everything is literal' {
             $var = 'Some things you must take literally'
-            '____' | Should -Be $var
+            'Some things you must take literally' | Should -Be $var
         }
 
         It 'can contain special characters' {
             # 'Special' is just a title.
             $complexVar = 'They interpret these characters literally: $ ` $()'
-            '____' | Should -Be $complexVar
+            'they interpret these characters literally: $ ` $()' | Should -Be $complexVar
         }
 
         It 'can contain quotation marks' {
             $Quotes = 'This creates only one set of ''quotation marks'' in the string.'
 
             # Single quotes are easier to work with in double-quoted strings.
-            "____" | Should -Be $Quotes
+            "This creates only one set of 'quotation marks' in the string." | Should -Be $Quotes
         }
     }
 
@@ -43,17 +43,17 @@ Describe 'Strings' {
 
         It 'can expand variables' {
             $var = 'apple'
-            '____' | Should -Be "My favorite fruit is $var"
+            'My favorite fruit is apple' | Should -Be "My favorite fruit is $var"
         }
 
         It 'can do a simple expansion' {
-            '____' | Should -Be "Your home directory is: $HOME"
+            'Your home directory is: C:\Users\JayRod.DESKTOP-UIJI1V3' | Should -Be "Your home directory is: $HOME"
         }
 
         It 'handles other ways of doing the same thing' {
             # Strings can handle entire subexpressions being inserted as well!
             $String = "Your home folder is: $(Get-Item -Path $HOME)"
-            '____' | Should -Be $String
+            'Your home folder is: C:\Users\JayRod.DESKTOP-UIJI1V3' | Should -Be $String
         }
 
         It 'will expand variables that do not exist' {
