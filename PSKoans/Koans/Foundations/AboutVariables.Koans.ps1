@@ -17,12 +17,12 @@ Describe 'Variable Assignment' {
     It 'gives a name to a value or object' {
         # Names give succinct descriptions to pieces of reality.
         $Fifty = 50
-        $Value = __
+        $Value = 50 
 
         Set-Variable -Name 'Greeting' -Value 'Hello!'
 
         $Value -eq $Fifty | Should -BeTrue
-        __ | Should -Be $Greeting
+        'Hello!' | Should -Be $Greeting
     }
 
     <#
@@ -33,17 +33,17 @@ Describe 'Variable Assignment' {
     It 'infers types on its own' {
         $Number = 10
 
-        $Number | Should -BeOfType [____]
+        $Number | Should -BeOfType [int]
     }
 
     It 'can directly compare types' {
         # For each task, a different tool.
         $Number = 5
         $Number -is [int] | Should -BeTrue
-        $Number | Should -BeOfType [____]
+        $Number | Should -BeOfType [int]
 
         $Text = 'Every worthwhile step is uphill.'
-        [____] | Should -Be $Text.GetType()
+        [string] | Should -Be $Text.GetType()
     }
 
     It 'allows types to be explicitly set' {
@@ -56,8 +56,8 @@ Describe 'Variable Assignment' {
         #>
         $String = [string]$true
 
-        [____] | Should -Be $Number.GetType()
-        $String | Should -BeOfType [____]
+        [int] | Should -Be $Number.GetType()
+        $String | Should -BeOfType [string]
     }
 
     It 'distinguishes between types of numbers' {
@@ -70,7 +70,7 @@ Describe 'Variable Assignment' {
         $NotInteger = 12.0
 
         $Integer | Should -BeOfType [int]
-        $NotInteger | Should -BeOfType [____]
+        $NotInteger | Should -BeOfType [double]
     }
 
     It 'allows you to declare constant variables' {
@@ -79,16 +79,16 @@ Describe 'Variable Assignment' {
             Set-Variable -Name 'Constant' -Value 25 -Option Constant
 
             # So what happens if we try to modify $Constant in some way?
-            $____ = 'NewValue'
+            $Constant = 'NewValue'
         }
-        $RemoveConstant | Should -Throw -ExpectedMessage '____'
+        $RemoveConstant | Should -Throw -ExpectedMessage 'Cannot overwrite variable Constant because it is read-only or constant.'
 
         $RemoveReadOnly = {
             # Contrast Read-Only variables, which can be later removed (if you do it right.)
             Set-Variable -Name 'Constant' -Value 25 -Option ReadOnly
 
             # While these variables can be Removed, they cannot be directly altered.
-            Remove-Variable -Name '____' -Force -ErrorAction Stop
+            Remove-Variable -Name 'Constant' -Force -ErrorAction Stop
 
             # Once the readonly variable is removed, we can re-create and edit it as normal.
             $Constant = 2
