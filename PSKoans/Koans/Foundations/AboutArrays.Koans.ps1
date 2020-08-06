@@ -31,7 +31,7 @@ Describe 'Arrays' {
             [0], the second at [1], etc.
         #>
         $Ages[0] | Should -Be 12
-        __ | Should -Be $Ages[3]
+        64 | Should -Be $Ages[3]
     }
 
     It 'can be created with the @() operator' {
@@ -51,7 +51,7 @@ Describe 'Arrays' {
         )
 
         # Where is index 4 in the above array?
-        __ | Should -Be $Names[4]
+        'Serena' | Should -Be $Names[4]
 
         <#
             Although in many cases in PowerShell, an expression that only
@@ -61,7 +61,7 @@ Describe 'Arrays' {
         #>
         $Array = @( 10 )
 
-        $Array.GetType().FullName | Should -Be System.____
+        $Array.GetType().FullName | Should -Be System.Object[]
     }
 
     It 'is a fixed size collection; elements cannot be added or removed' {
@@ -69,8 +69,8 @@ Describe 'Arrays' {
 
         $Ages = 12, 25, 18, 64
 
-        { $Ages.Add(59) } | Should -Throw -ExpectedMessage '____'
-        { $Ages.Remove(12) } | Should -Throw -ExpectedMessage '____'
+        { $Ages.Add(59) } | Should -Throw -ExpectedMessage 'Collection was of a fixed size.'
+        { $Ages.Remove(12) } | Should -Throw -ExpectedMessage 'Collection was of a fixed size.'
     }
 
     It 'can be created using the addition operator' {
@@ -82,7 +82,7 @@ Describe 'Arrays' {
 
         $Ages = 12, 25, 18, 64
 
-        $Age = __
+        $Age = 42 
         $Ages = $Ages + $Age
 
         <#
@@ -90,7 +90,7 @@ Describe 'Arrays' {
             assignment combination operator.
         #>
 
-        $Age = __
+        $Age = 59 
         $Ages += $Age
 
         $Ages | Should -Be 12, 25, 18, 64, 42, 59
@@ -107,8 +107,8 @@ Describe 'Arrays' {
     }
 
     It 'can be joined with another array using the addition operator' {
-        $firstValue = __
-        $fourthValue = __
+        $firstValue = 1 
+        $fourthValue = 4 
 
         $Array = @($firstValue, 2) + @(3, $fourthValue)
 
@@ -124,13 +124,13 @@ Describe 'Arrays' {
         $Jim, $Ashley, $Theresa, $Bob, $Janice = $Ages
 
         $Jim | Should -Be 11
-        __ | Should -Be $Bob
+        74 | Should -Be $Bob
 
         # Arrays can be unevenly split by specifying fewer variables.
         $Jim, $Ashley, $Others = $Ages
 
         # What would be stored in $Others?
-        __ | Should -Be $Others
+        25, 74, 19 | Should -Be $Others
 
         <#
             If you know the contents of the array and want to skip specific
@@ -140,26 +140,26 @@ Describe 'Arrays' {
             it will be ignored.
         #>
         $null, $Number1, $Number2 = $Others
-        __ | Should -Be $Number1
+        74 | Should -Be $Number1
     }
 
     It 'lets you build a subset of the original array' {
         $Array = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-        $Start = __
-        $Finish = __
+        $Start = 5
+        $Finish = 7 
 
         # Arrays let you pick a range of indexes to build new arrays
         $Array[$Start..$Finish] | Should -Be @(6, 7, 8)
 
         # You can also select specific index numbers
-        $Index = __
+        $Index = 8
         $Array[1, $Index, 4] | Should -Be @(2, 9, 5)
     }
 
     It 'has properties which describe the size of the array' {
         $Array = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
-        __ | Should -Be $Array.Count
+        10 | Should -Be $Array.Count
 
         # For fixed size arrays, the Count property is an alias of Length
 
@@ -183,19 +183,19 @@ Describe 'Arrays' {
 
     It 'allows use of negative indexes' {
         $Array = 1, 2, 3, 4, 5, 6, 7
-        __ | Should -Be $Array[-1] # What is the -1th item?
+        7 | Should -Be $Array[-1] # What is the -1th item?
 
         # Negative numbers can also form a range and extract subsets
-        $Item = __
+        $Item = 4 
         @( $Item, 5, 6, 7) | Should -Be $Array[-4..-1]
 
-        $Index = __
+        $Index = -7 
         $Array[-3, $Index, -6] | Should -Be @(5, 1, 2)
     }
 
     It 'can reverse an array' {
         $Array = 1, 2, 3, 4, 5, 6, 7
-        $LastIndex = __
+        $LastIndex = -7 
         $Array[-1..$LastIndex] | Should -Be @(7, 6, 5, 4, 3, 2, 1)
     }
 
@@ -203,10 +203,10 @@ Describe 'Arrays' {
         $Array = 1, 2, 3, 4
 
         # It allows negative indexes, but what about indexes out of range?
-        __ | Should -Be $Array[4]
+        $null | Should -Be $Array[4]
 
         # What about undefined negative indexes?
-        __ | Should -Be $Array[-10]
+        $null | Should -Be $Array[-10]
 
         <#
             📝 NOTE
@@ -221,13 +221,13 @@ Describe 'Arrays' {
 
         $Array = 1, 2, 3, 4, 5
 
-        $StartIndex = __
+        $StartIndex = 1 
         $StartIndex..5 | Should -Be $Array
     }
 
     It 'can create an array of letters from a range' {
-        $firstLetter = '__'
-        $lastLetter = '__'
+        $firstLetter = 'a'
+        $lastLetter = 'd'
 
         if ($PSVersionTable.PSEdition -eq 'Core') {
             # PowerShell 6.2+ can use .. between the letters to create an array.
@@ -268,13 +268,13 @@ Describe 'Arrays' {
         #>
 
         $Numbers = 1, 2, 3, 4
-        '____' | Should -Be $Numbers.GetType().Name
+        'Object[]' | Should -Be $Numbers.GetType().Name
 
         $Strings = 'first', 'second', 'third'
-        [____] | Should -Be $Strings.GetType()
+        [System.Object[]] | Should -Be $Strings.GetType()
 
         $Processes = Get-Process
-        '____' | Should -Be $Processes.GetType().Name
+        'Object[]' | Should -Be $Processes.GetType().Name
 
         <#
             The base type of Object[], Char[], and other fixed size array types
@@ -295,22 +295,22 @@ Describe 'Arrays' {
             For example, each array has a Contains method.
         #>
         $Numbers = 1, 2, 3, 4
-        $____ -eq $Numbers.Contains(3) | Should -BeTrue
+        $true -eq $Numbers.Contains(3) | Should -BeTrue
 
         # The Contains method is case sensitive for arrays containing strings.
         $Strings = 'first', 'second', 'third'
-        $____ -eq $Strings.Contains('first') | Should -BeTrue
-        $____ -eq $Strings.Contains('First') | Should -BeTrue
+        $true -eq $Strings.Contains('first') | Should -BeTrue
+        $false -eq $Strings.Contains('First') | Should -BeTrue
         # PowerShell's -contains operator is not case sensitive.
-        $Strings -contains '____' | Should -BeTrue
-        $Strings -contains '____' | Should -BeTrue
+        $Strings -contains 'First' | Should -BeTrue
+        $Strings -contains 'SECOND' | Should -BeTrue
     }
 
     It 'can be cast to a specific collection type' {
         [string[]] $Array = 1, 2, 3, 4, 5
 
         # We started with numbers... what do we have after the array is created?
-        [____] | Should -Be $Array[0].GetType()
-        [____] | Should -Be $Array.GetType()
+        [string] | Should -Be $Array[0].GetType()
+        [string[]] | Should -Be $Array.GetType()
     }
 }
