@@ -42,17 +42,17 @@ Describe 'String Comparison Operators' {
             $String = 'this is a string.'
             $OtherString = 'This is a string.'
 
-            $____ | Should -Be ($String -eq $OtherString)
+            $true | Should -Be ($String -eq $OtherString)
             # Watch out for case sensitive operators!
-            $____ | Should -Be ($String -ceq $OtherString)
+            $false | Should -Be ($String -ceq $OtherString)
         }
 
         It 'is useful for a straightforward comparison' {
             $String = 'one more string!'
             $OtherString = "ONE MORE STRING!"
 
-            $____ | Should -Be ($String -ne $OtherString)
-            $____ | Should -Be ($String -cne $OtherString)
+            $false | Should -Be ($String -ne $OtherString)
+            $true | Should -Be ($String -cne $OtherString)
         }
     }
 
@@ -62,8 +62,8 @@ Describe 'String Comparison Operators' {
             $String = 'my string'
             $OtherString = 'your string'
 
-            $____ | Should -Be ($String -gt $OtherString)
-            $____ | Should -Be ($String -lt $OtherString)
+            $false | Should -Be ($String -gt $OtherString)
+            $true | Should -Be ($String -lt $OtherString)
         }
     }
 }
@@ -82,10 +82,10 @@ Describe 'String Array Operators' {
             $String = "hello fellows what a lovely day"
             $Split = @(
                 'hello'
-                '____'
+                'fellows'
                 'what'
-                '____'
-                '____'
+                'a'
+                'lovely'
                 'day'
             )
             $Split | Should -Be ($String -split ' ')
@@ -94,23 +94,23 @@ Describe 'String Array Operators' {
         It 'uses regex by default' {
             $String = 'hello.dear'
             # Since -split uses regex, we have to escape certain characters to treat them literally.
-            @('____', '____') | Should -Be ($String -split '\.')
+            @('hello', 'dear') | Should -Be ($String -split '\.')
         }
 
         It 'can limit the number of substrings' {
             $Planets = 'Mercury,Venus,Earth,Mars,Jupiter,Saturn,Uranus,Neptune'
-            @('____', '____', '____', '____') | Should -Be ($Planets -split ',', 4)
+            @('Mercury', 'Venus', 'Earth', 'Mars,Jupiter,Saturn,Uranus,Neptune') | Should -Be ($Planets -split ',', 4)
         }
 
         It 'can use simple matching' {
             $String = 'hello.dear'
             # Using SimpleMatch mode disables regex.
-            @('____', '____') | Should -Be ($String -split '.', 0, 'SimpleMatch')
+            @('hello', 'dear') | Should -Be ($String -split '.', 0, 'SimpleMatch')
         }
 
         It 'can be case sensitive' {
             $String = "applesAareAtotallyAawesome!"
-            @('____', '____', '____', '____') | Should -Be ($String -csplit 'A')
+            @('apples', 'are', 'totally', 'awesome!') | Should -Be ($String -csplit 'A')
         }
     }
 
@@ -126,17 +126,17 @@ Describe 'String Array Operators' {
         #>
         It 'can join an array into a single string' {
             $Array = 'Hi', 'there,', 'what', 'are', 'you', 'doing?'
-            '____' | Should -Be ($Array -join ' ')
+            'Hi there, what are you doing?' | Should -Be ($Array -join ' ')
         }
 
         It 'always produces a string result' {
             $Array = 1, 3, 6, 71, 9, 22, 1, 3, 4, 55, 6, 7, 8
-            '____' | Should -Be (-join $Array)
+            '1367192213455678' | Should -Be (-join $Array)
         }
 
         It 'can join with any delimiters' {
             $Array = 'This', 'is', 'so', 'embarrassing!'
-            $Array -join '____' | Should -Be 'This-OW! is-OW! so-OW! embarrassing!'
+            $Array -join '-OW! ' | Should -Be 'This-OW! is-OW! so-OW! embarrassing!'
         }
     }
 
@@ -145,19 +145,19 @@ Describe 'String Array Operators' {
         It 'lets you treat strings as [char[]] arrays' {
             $String = 'Beware the man-eating rabbit'
 
-            '__' | Should -Be $String[5]
+            'e' | Should -Be $String[5]
         }
 
         It 'can create a [char[]] array from a string' {
             $String = 'Good luck!'
 
-            @('__', '__', '__', '__') | Should -Be $String[0..3]
+            @('G', 'o', 'o', 'd') | Should -Be $String[0..3]
         }
 
         It 'can be combined with -join to create substrings' {
             $String = 'Mountains are merely mountains.'
 
-            '____' | Should -Be (-join $String[0..8])
+            'Mountains' | Should -Be (-join $String[0..8])
         }
     }
 }
@@ -176,21 +176,21 @@ Describe 'Regex Operators' {
         # These operators return either $true or $false, indicating whether the string matched.
 
         It 'can be used as a simple conditional' {
-            $String = '__'
+            $String = 'apple'
 
             $String -match '[a-z]' | Should -BeTrue
             $String -notmatch '[xfd]' | Should -BeTrue
         }
 
         It 'can store the matched portions' {
-            $String = '____'
+            $String = 'pine'
 
             # -match automatically stores results in the $matches automatic variable for later use.
             $Result = if ($String -match '[a-z]{4}') {
                 $Matches[0]
             }
 
-            $Result | Should -Be '____'
+            $Result | Should -Be 'pine'
         }
 
         It 'supports named matches' {
@@ -199,11 +199,11 @@ Describe 'Regex Operators' {
 
             $String -match $Pattern | Should -BeTrue
 
-            $Matches.FirstWord | Should -BeExactly '____'
-            $Matches.LastWord | Should -BeExactly '____'
+            $Matches.FirstWord | Should -BeExactly 'PowerShell'
+            $Matches.LastWord | Should -BeExactly 'useful'
 
             # Reflect on the above and below... can you find what that will match the pattern?
-            $String = '____'
+            $String = 'Cool Koans'
             $Pattern = '^(?<FirstWord>[a-z]+) (?<SecondWord>[a-z]+)$'
 
             $String -match $Pattern | Should -BeTrue -Because 'The string must match the given pattern.'
@@ -217,14 +217,14 @@ Describe 'Regex Operators' {
                 When selecting match groups from unnamed groups, the first group is at index 1
                 and the 'entire' matched portion is still at index 0
             #>
-            $String = '1298-___-0000'
+            $String = '1298-000-0000'
             $Pattern = '^([0-9]{4})-([0-5]{3})'
             $Result = $String -match $Pattern
 
             $Result | Should -BeTrue
-            '__' | Should -Be $Matches[0]
+            '1298-000' | Should -Be $Matches[0]
             '1298' | Should -Be $Matches[1]
-            '__' | Should -Be $Matches[2]
+            '000' | Should -Be $Matches[2]
         }
     }
 
@@ -237,7 +237,7 @@ Describe 'Regex Operators' {
         It 'can be used to replace string segments' {
             $String = 'Keep calm and carry on.'
             $Pattern = 'and'
-            $Replacement = '__'
+            $Replacement = '&'
 
             $String -replace $Pattern, $Replacement | Should -Be 'Keep calm & carry on.'
         }
@@ -247,7 +247,7 @@ Describe 'Regex Operators' {
             $Pattern = '[aeiou]|[^a-z]'
 
             # By not providing a replacement string, the matching segments are removed.
-            $String -replace $Pattern | Should -Be '__'
+            $String -replace $Pattern | Should -Be 'Plshthgrntby'
         }
 
         It 'can be used to isolate specific portions of a string' {
@@ -256,7 +256,7 @@ Describe 'Regex Operators' {
             # These tokens are Regex variables, not PS ones; literal strings or escaping is needed!
             $Replacement = '$1 $2 $3'
 
-            '____' | Should -Be ($String -replace $Pattern, $Replacement)
+            '0281 3649 8123' | Should -Be ($String -replace $Pattern, $Replacement)
         }
     }
 }
@@ -271,15 +271,15 @@ Describe 'Formatting Operators' {
         #>
         It 'allows you to insert values into a literal string' {
             $String = 'Hello {0}, my name is also {0}!'
-            $Name = '____'
+            $Name = 'Joe'
 
-            '____' | Should -Be ($String -f $Name)
+            'Hello Joe, my name is also Joe!' | Should -Be ($String -f $Name)
         }
 
         It 'can insert multiple values with formatting on each' {
             $String = 'Employee #{1:000000}, you are due in room #{0:000} for a drug test.'
 
-            '____' | Should -Be ($String -f 154, 19)
+            'Employee #000019, you are due in room #154 for a drug test.' | Should -Be ($String -f 154, 19)
         }
     }
 
@@ -291,14 +291,14 @@ Describe 'Formatting Operators' {
         It 'will convert any object to string' {
             $String = "Hello, user $(1..10)"
 
-            '____' | Should -Be $String
+            'Hello, user 1 2 3 4 5 6 7 8 9 10' | Should -Be $String
         }
 
         It 'is necessary to insert object properties into strings' {
             $Object = Get-Item $Home
 
-            '____' | Should -Be "$Object.Parent"
-            '____' | Should -Be "$($Object.Parent)"
+            'C:\Users\JayRod.DESKTOP-UIJI1V3.Parent' | Should -Be "$Object.Parent"
+            'Users' | Should -Be "$($Object.Parent)"
         }
     }
 }
