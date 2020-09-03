@@ -29,9 +29,9 @@ Describe 'If/Else' {
             }
 
             $ExpectedResult = Assert-IsEven -Number 2
-            '____' | Should -Be $ExpectedResult
+            'EVEN' | Should -Be $ExpectedResult
 
-            Assert-IsEven -Number __ | Should -Be 'ODD'
+            Assert-IsEven -Number 3 | Should -Be 'ODD'
         }
 
         It 'can be used alone' {
@@ -41,8 +41,8 @@ Describe 'If/Else' {
                     $Number * 10
                 }
             }
-            __ | Should -Be (Set-Number -Number 4)
-            Set-Number -Number __ | Should -Be 70
+            $null | Should -Be (Set-Number -Number 4)
+            Set-Number -Number 7 | Should -Be 70
         }
     }
 
@@ -61,7 +61,7 @@ Describe 'If/Else' {
                 # but depending on the outcome of the conditional, either could end up stored!
                 "$Thing is less than 5"
             }
-            __ | Should -Be $Result
+            116 | Should -Be $Result
         }
 
         It 'can also apply a condition to an else' {
@@ -75,7 +75,7 @@ Describe 'If/Else' {
                 -1
             }
             $Value += 1
-            __ | Should -Be $Value
+            11 | Should -Be $Value
         }
     }
 }
@@ -89,7 +89,14 @@ Describe 'Switch' {
 
         It 'is used to create multiple possible branches' {
             $Folders = 4..9 | ForEach-Object {"$_" * $_}
-
+            # The above will assign $Folders the following:
+            #
+            # 4444                                                                                                                    
+            # 55555                                                                                                                   
+            # 666666                                                                                                                  
+            # 7777777                                                                                                                 
+            # 88888888
+            # 999999999
             switch ($Folders.Count) {
                 1 {
                     # Switch statements assign the current value being tested to $_
@@ -108,13 +115,13 @@ Describe 'Switch' {
                 }
             }
 
-            '____' | Should -Be $Amount
+            'other 6' | Should -Be $Amount
         }
     }
     Context 'Assigning Values' {
 
         It 'can also be used to conditionally assign values' {
-            $Case = __
+            $Case = 45
             $Variable = switch ($Case) {
                 45 {
                     'hello!'
@@ -133,8 +140,8 @@ Describe 'Switch' {
                 }
             }
 
-            __ | Should -Be $Variable
-            $Variable | Should -BeOfType [____]
+            'hello!' | Should -Be $Variable
+            $Variable | Should -BeOfType [string]
         }
 
         It 'can go through multiple branches' {
@@ -148,7 +155,7 @@ Describe 'Switch' {
                     2
                 }
             }
-            __ | Should -Be ($Values)
+            @(1,2) | Should -Be ($Values)
         }
     }
 
@@ -157,7 +164,7 @@ Describe 'Switch' {
         It 'will process each element of arrays' {
             $Array = @(
                 4
-                __
+                7 
             )
 
             $Result = switch ($Array) {
@@ -199,7 +206,7 @@ Describe 'Switch' {
     Context 'Types of Switch' {
 
         It 'accepts wildcard conditions' {
-            $Condition = __
+            $Condition = 'Harmful' 
             # ... but only if you ask nicely, that is!
             $Result = switch -Wildcard ($Condition) {
                 # Wildcarded switches work with * for multiple characters
@@ -211,12 +218,12 @@ Describe 'Switch' {
                 }
             }
 
-            $Result | Should -Be '__'
+            $Result | Should -Be 'Safe'
         }
 
         It 'accepts regex conditions' {
             # Enter a regex string that matches the pattern to pass the test.
-            $Value = '__'
+            $Value = 'amazon'
             $Pattern = "a.*z.n"
             <#
                 If you need a regex refresher, check out https://regexr.com/
@@ -231,7 +238,7 @@ Describe 'Switch' {
         }
 
         It 'allows use of conditional expressions' {
-            $TestValue = __
+            $TestValue = 9 
             <#
                 Unlike many other languages, PowerShell allows you to customise switches immensely
                 through the use of script blocks to create dynamic conditions
