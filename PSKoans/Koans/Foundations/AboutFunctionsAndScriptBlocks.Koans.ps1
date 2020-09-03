@@ -31,7 +31,7 @@ Describe 'Functions' {
             Write-Output 42
         }
 
-        __ | Should -Be (Get-Number)
+        @(20, 42) | Should -Be (Get-Number)
 
         function Get-ReturnedNumber {
             <#
@@ -39,7 +39,7 @@ Describe 'Functions' {
                 to be sent, along with any output passed to the return statement
                 itself, then ends the function.
             #>
-            return __
+            return 13 
             Write-Output "Does not return anything."
         }
 
@@ -55,7 +55,7 @@ Describe 'Functions' {
             12
         }
 
-        __ | Should -Be (Get-DroppedNumber)
+        12 | Should -Be (Get-DroppedNumber)
     }
 
     It 'can accept parameters' {
@@ -65,16 +65,16 @@ Describe 'Functions' {
         }
 
         # Values are supplied separated by spaces, without parentheses.
-        Add-Things '7' __ | Should -Be '72' # Strings add differently than numbers!
-        __ | Should -Be (Add-Things 1 2)
+        Add-Things '7' '2' | Should -Be '72' # Strings add differently than numbers!
+        3 | Should -Be (Add-Things 1 2)
 
         # The road to mastery is travelled with many small steps.
         function Add-Numbers ($Number1, $Number2) {
             return ($Number1 + $Number2)
         }
 
-        __ | Should -Be (Add-Numbers 1 7)
-        Add-Numbers __ 15 | Should -Be 31
+        8 | Should -Be (Add-Numbers 1 7)
+        Add-Numbers 16 15 | Should -Be 31
 
         <#
             Values can be passed to specified parameters; these values will be assigned to
@@ -98,7 +98,7 @@ Describe 'Functions' {
         }
         # How long is a piece of string?
         Measure-String 'Hello!' | Should -Be 6
-        __ | Should -Be (Measure-String 'Muffins')
+        7 | Should -Be (Measure-String 'Muffins')
     }
 }
 
@@ -123,7 +123,7 @@ Describe 'Script Block' {
         $Script2 = {
             # Currently, this will just output the script block as an object
             # Try appending .Invoke() to the following line to cause the original block to be executed
-            $Script
+            $Script.Invoke()
         }
         $Script | Should -Throw
         $Script2 | Should -Throw
