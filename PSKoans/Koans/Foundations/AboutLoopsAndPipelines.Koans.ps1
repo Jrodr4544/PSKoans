@@ -55,7 +55,7 @@ Describe 'Pipelines and Loops' {
                     #>
                     $_ + 2
                 } |
-                Should -Be __ # What happens to the array after we change each value?
+                Should -Be @(3,4,5,6,7) # What happens to the array after we change each value?
         }
 
         It 'can store output after processing it through multiple cmdlets' {
@@ -67,7 +67,7 @@ Describe 'Pipelines and Loops' {
             $Strings = 3..7 |
                 ForEach-Object { "Hello $_!" } | # Line breaks after a pipe character are OK!
                 Where-Object { $_ -notlike '*5*' } # (Indents are optional.)
-            __ | Should -Be $Strings
+            @('Hello 3!', 'Hello 4!', 'Hello 6!', 'Hello 7!') | Should -Be $Strings
         }
 
         It 'can reference previous values from each pipeline segment with -PipelineVariable' {
@@ -88,10 +88,10 @@ Describe 'Pipelines and Loops' {
                 ForEach-Object { "Initial: $InitialValue, Current: $_" } |
                 Should -Be @(
                     "Initial: 1, Current: 2"
-                    "Initial: __, Current: 4"
-                    "Initial: 3, Current: __"
-                    "Initial: __, Current: __"
-                    "Initial: __, Current: __"
+                    "Initial: 2, Current: 4"
+                    "Initial: 3, Current: 6"
+                    "Initial: 4, Current: 8"
+                    "Initial: 5, Current: 10"
                 )
         }
     }
@@ -111,7 +111,7 @@ Describe 'Pipelines and Loops' {
                 #>
                 $Number
             }
-            __ | Should -Be $Values
+            @(1, 2, 3, 4, 5) | Should -Be $Values
         }
 
         It 'can loop a set number of times' {
@@ -125,11 +125,11 @@ Describe 'Pipelines and Loops' {
 
             # What will the above loop store in $Values?
             $Values | Should -Be @(
-                __
-                __
-                __
-                __
-                __
+                0
+                1
+                2
+                3
+                4
             )
         }
 
@@ -155,7 +155,7 @@ Describe 'Pipelines and Loops' {
                     break # the break statement breaks out of the current loop.
                 }
             }
-            __ | Should -Be $Values
+            @(1, 2, 3) | Should -Be $Values
         }
 
         It 'can loop one or more times depending on the conditional statement' {
@@ -172,7 +172,7 @@ Describe 'Pipelines and Loops' {
                 'eat me!'
                 # Exactly one iteration occurs despite the condition being $false.
             } while ($false)
-            __ | Should -Be $Values
+            'eat me!' | Should -Be $Values
         }
     }
 }
