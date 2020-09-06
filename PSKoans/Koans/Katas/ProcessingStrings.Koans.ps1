@@ -88,6 +88,27 @@ Describe "The Stock Challenge" {
 
             # Add the solution code here!
 
+            # Go through each element in the array and split the string on comma. Once the string is split into an array,
+            # find the difference between Open and Close values in order to compare with the highest current val.
+
+            $newArr = @()
+            $greatestVariance = 0
+            $date = ''
+
+            foreach ($element in $Data) {
+                $newArr += , $element.split(',') # Now the $newArr is an array of arrays.
+            }
+
+            for ($num = 1; $num -lt $newArr.Count; $num++) {
+                # Test the difference between close and open values in order to find the greatest variance.
+                if (($newArr[$num][4] - $newArr[$num][1]) -gt $greatestVariance) {
+                    $greatestVariance = $newArr[$num][4] - $newArr[$num][1]
+                    $date = $newArr[$num][0]
+                }
+            }
+
+            return $date
+
         }
     }
 
