@@ -45,6 +45,20 @@ Describe 'Kata - Sorting Characters' {
 
             # Add your solution code here!
 
+            # One possible way would be to set an array with alphabet values
+            # and then iterate through a given string comparing each character 
+            # value to each letter of the alphabet and sorting them.
+
+            $abc = "abcdefghijklmnopqrstuvwxyz"
+
+            for ($i = 0; $i -le $abc.Length; $i++) {
+                for ($j = 0; $j -le $String.Length; $j++) {
+                    if ($String[$j] -eq $abc[$i]) {
+                        $result += $String[$j]
+                    }
+                }
+            }
+            return $result
         }
     }
 
