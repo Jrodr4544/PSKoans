@@ -178,7 +178,7 @@ Describe 'Get-Command' {
     It 'lists available commands' {
         # Try calling Get-Command in a PowerShell console to see the typical output!
         $CommandCount = Get-Command | Measure-Object | Select-Object -ExpandProperty Count
-        1639 | Should -Be $CommandCount
+        1640 | Should -Be $CommandCount
         Get-Command | Select-Object -First 1 -ExpandProperty Name | Should -Be 'Add-AppPackage'
     }
 
