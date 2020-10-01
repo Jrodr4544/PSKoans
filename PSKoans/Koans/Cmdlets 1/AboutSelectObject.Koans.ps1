@@ -20,9 +20,9 @@ Describe 'Select-Object' {
 
         $Selected = Get-Process -Id $PID | Select-Object Name, ID, Path
 
-        @('____', '____', 'Path') | Should -Be $Selected.PSObject.Properties.Name
+        @('Name', 'ID', 'Path') | Should -Be $Selected.PSObject.Properties.Name
 
-        $Selected.____ | Should -Be $PID
+        $Selected.id | Should -Be $PID
     }
 
     It 'can exclude specific properties from an object' {
@@ -34,7 +34,7 @@ Describe 'Select-Object' {
 
         $Folder = Get-Item -Path $PSHome
 
-        '____' | Should -Be $Folder.Attributes
+        'Directory' | Should -Be $Folder.Attributes
 
         $Selected = $Folder | Select-Object -Property * -ExcludeProperty Attributes
 
@@ -50,7 +50,7 @@ Describe 'Select-Object' {
 
         $Folder = Get-Item -Path $PSHome
 
-        $Folder | Should -BeOfType [____]
+        $Folder | Should -BeOfType [System.IO.FileSystemInfo]
 
         'System.IO.Directoryinfo' | Should -BeIn $Folder.PSTypeNames
 
@@ -60,13 +60,13 @@ Describe 'Select-Object' {
 
         $Selected | Should -BeOfType [System.Management.Automation.PSCustomObject]
 
-        '____' | Should -BeIn $Selected.PSTypeNames
+        'Selected.System.IO.DirectoryInfo' | Should -BeIn $Selected.PSTypeNames
     }
 
     It 'can retrieve just the contents or value of a property' {
         # Individual properties can be expanded, retrieving the just a value.
 
-        $PropertyToExpand = '____'
+        $PropertyToExpand = 'Attributes'
 
         $Value = Get-Item -Path $PSHome | Select-Object -ExpandProperty $PropertyToExpand
 
@@ -85,25 +85,25 @@ Describe 'Select-Object' {
 
         # The resulting object will contain all of the properties found under VersionInfo.
 
-        $Selected.____ | Should -Be $PowerShellExe.FullName
+        $Selected.FileName | Should -Be $PowerShellExe.FullName
     }
 
     It 'can pick specific numbers of objects' {
         $Array = 1..100 -as [string[]]
 
         $FirstThreeValues = $Array | Select-Object -First 3
-        @('__', '__', '__') | Should -Be $FirstThreeValues
+        @('1', '2', '3') | Should -Be $FirstThreeValues
 
         $LastFourValues = $Array | Select-Object -Last 4
-        @('__', '__', '__', '__') | Should -Be $LastFourValues
+        @('97', '98', '99', '100') | Should -Be $LastFourValues
 
         $Values = $Array | Select-Object -Skip 10 -First 5
-        @('__', '__', '__', '__', '__') | Should -Be $Values
+        @('11', '12', '13', '14', '15') | Should -Be $Values
 
         # SkipLast cannot be used alongside the Last, First, and Skip parameters.
 
         $Values = $Array | Select-Object -SkipLast 95
-        @('__', '__', '__', '__', '__') | Should -Be $Values
+        @('1', '2', '3', '4', '5') | Should -Be $Values
     }
 
     It 'can ignore duplicate objects' {
@@ -116,7 +116,7 @@ Describe 'Select-Object' {
         )
 
         $UniqueItems = $Array | Select-Object -Unique
-        @('6', '__', '4', '8', '__', '__', '3', '__', '2') | Should -Be $UniqueItems
+        @('6', '1', '4', '8', '7', '5', '3', '9', '2') | Should -Be $UniqueItems
     }
 
     It 'can ignore duplicate complex objects' {
@@ -134,11 +134,11 @@ Describe 'Select-Object' {
             Get-Process -Id $PID
         )
 
-        __ | Should -Be $Processes.Count
+        2 | Should -Be $Processes.Count
 
         $UniqueProcesses = $processes | Select-Object -Unique
 
-        __ | Should -Be $UniqueProcesses.Count
+        1 | Should -Be $UniqueProcesses.Count
 
         <#
             As Process objects are not directly comparable, they are made unique by comparing a
@@ -172,7 +172,7 @@ Describe 'Select-Object' {
 
         $SelectedFile = $Files | Select-Object -First 1
 
-        '____' | Should -Be $SelectedFile.GetType().FullName
+        'System.IO.FileInfo' | Should -Be $SelectedFile.GetType().FullName
     }
 
     It 'supports custom, or calculated, properties' {
@@ -192,7 +192,7 @@ Describe 'Select-Object' {
             @{ Name = 'RunningTime'; Expression = { (Get-Date) - $_.StartTime } }
         )
 
-        $Selected.____ | Should -BeGreaterThan 0
+        $Selected.id | Should -BeGreaterThan 0
 
         <#
             Custom properties are often used to merge information from multiple sources into
@@ -219,7 +219,7 @@ Describe 'Select-Object' {
             @{ Name = 'ProcessId'; Expression = 'Id' }
         )
 
-        $Selected.____ | Should -Be $Process.Id
+        $Selected.ProcessId | Should -Be $Process.Id
     }
 
     It 'allows Label to be used instead of Name' {
@@ -229,7 +229,7 @@ Describe 'Select-Object' {
             @{ Label = 'ProcessId'; Expression = 'Id' }
         )
 
-        $Selected.____ | Should -Be $Process.Id
+        $Selected.ProcessId | Should -Be $Process.Id
     }
 
     It 'supports abbreviated names in a calculated property' {
@@ -249,7 +249,7 @@ Describe 'Select-Object' {
             @{ Name = 'RunningTime'; Expression = { (Get-Date) - $_.StartTime } }
         )
 
-        $Selected.____ | Should -BeOfType [TimeSpan]
+        $Selected.RunningTime | Should -BeOfType [TimeSpan]
     }
 
     It 'From Select-Object to PSCustomObject' {
