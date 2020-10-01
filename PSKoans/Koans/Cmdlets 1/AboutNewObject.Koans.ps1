@@ -15,17 +15,17 @@ Describe 'New-Object' {
         $Hashtable = @{}
 
         $Hashtable | Should -BeOfType System.Collections.Hashtable
-        $Object | Should -BeOfType __
+        $Object | Should -BeOfType System.Object 
     }
 
     It 'can create objects of any available type' {
         $PSObject = New-Object -TypeName 'PSObject'
-        $PSObject | Should -BeOfType __
+        $PSObject | Should -BeOfType System.Object 
     }
 
     It 'can accept arguments for the constructor' {
         $Object = New-Object 'string' -ArgumentList ([char[]]@('b','a','n','a','n','a'), 0, 3)
-        '__' | Should -Be $Object
+        'ban' | Should -Be $Object
         $Object | Should -BeOfType string
     }
 
@@ -34,6 +34,6 @@ Describe 'New-Object' {
         $Object2 = [PSObject]::new()
 
         $Object | Should -BeOfType System.Management.Automation.PSObject
-        $Object2 | Should -BeOfType __
+        $Object2 | Should -BeOfType System.Object
     }
 }
